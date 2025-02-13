@@ -1,14 +1,15 @@
 #include <iostream>
 #include <string>
-#include "../../hash/inc/hashing_model.h"
+#include "hash/inc/hashing_model.h"
 
 int main() {
+    hash::Md5Hasher hasher;
     hash::Hash16 h1;
-    hash::Hash32 h2;
-    hash::Hash64 h3;
-    std::cout << sizeof(h1) << ":" << sizeof(hash::Hash16) << std::endl;
-    std::cout << sizeof(h2) << ":" << sizeof(hash::Hash32) << std::endl;
-    std::cout << sizeof(h3) << ":" << sizeof(hash::Hash64) << std::endl;
+
+    std::vector<unsigned char> testData = {1, 3, 45, 21, 2, 3};
+    h1 = hasher.hash(testData);
+
+    std::cout << h1 << std::endl;
 
     return 0;
 }
