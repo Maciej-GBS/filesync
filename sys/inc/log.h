@@ -24,7 +24,7 @@ std::enable_if_t<is_streamable_v<T>, std::string> print(const T& obj) {
     return oss.str();
 }
 
-std::string format(const char* baseStr, const char* tail) {
+inline std::string format(const char* baseStr, const char* tail) {
     std::ostringstream oss;
     oss << baseStr << tail;
     return oss.str();
