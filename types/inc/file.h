@@ -1,12 +1,16 @@
 #pragma once
 
+#include <string>
+
 #include "hash.h"
 
 namespace filesync::types {
 
 struct File {
-    char* path;
+    std::string path;
     Hash16 md5hash;
-} File;
+
+    File(std::string p, Hash16 h) : path{p}, md5hash{h} {}
+};
 
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 #include <types/inc/hash.h>
 
 namespace filesync::hash {

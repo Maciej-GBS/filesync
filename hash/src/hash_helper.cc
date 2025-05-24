@@ -1,5 +1,6 @@
-#include "../inc/hash_helper.h"
 #include <openssl/md5.h>
+
+#include "../inc/hash_helper.h"
 
 namespace filesync::hash {
 
