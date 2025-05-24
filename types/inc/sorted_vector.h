@@ -11,18 +11,19 @@ class SortedVector {
 public:
     SortedVector() = default;
     ~SortedVector() = default;
-    SortedVector(const SortedVector&) noexcept;
-    SortedVector& operator=(const SortedVector&) noexcept;
-    SortedVector(SortedVector&&) noexcept;
-    SortedVector& operator=(SortedVector&&) noexcept;
+    SortedVector(const SortedVector&);
+    SortedVector& operator=(const SortedVector&);
+    SortedVector(SortedVector&&);
+    SortedVector& operator=(SortedVector&&);
 
-    std::vector<T>::const_iterator begin() const;
-    std::vector<T>::const_iterator end() const;
+    typename std::vector<T>::const_iterator begin() const;
+    typename std::vector<T>::const_iterator end() const;
     size_t size() const;
     void clear();
 
     void insert(const T& element);
-    void insert(const std::vector<T>::const_iterator& begin, const std::vector<T>::const_iterator& end);
+    void insert(typename std::vector<T>::const_iterator begin,
+                typename std::vector<T>::const_iterator end);
 };
 
 }
