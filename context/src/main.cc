@@ -1,13 +1,12 @@
 #include <iostream>
 #include <string>
-#include "hash/inc/hashing_model.h"
+#include <hash/inc/hash_helper.h>
 
-int main() {
-    hash::Md5Hasher hasher;
-    hash::Hash16 h1;
+int main(int argc, char* argv[]) {
+    filesync::types::Hash16 h1;
 
-    std::vector<unsigned char> testData = {1, 3, 45, 21, 2, 3};
-    h1 = hasher.hash(testData);
+    std::vector<unsigned char> testData = {3, 3, 45, 21, 2, 3};
+    h1 = filesync::hash::md5hash(testData);
 
     std::cout << h1 << std::endl;
 
