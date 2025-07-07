@@ -5,7 +5,6 @@
 #include <type_traits>
 
 #define DECL_FORMAT(type, name)  std::ostream& operator<<(std::ostream& os, const type& name)
-#define FORMAT(base, obj) ::filesync::format(base, obj)
 #define FORMATSTRING(obj) ::filesync::print(obj).c_str()
 
 namespace filesync {
@@ -26,7 +25,7 @@ std::enable_if_t<is_streamable_v<T>, std::string> print(const T& obj) {
     return oss.str();
 }
 
-inline std::string format(const char* baseStr, const char* tail) {
+inline std::string concat(const char* baseStr, const char* tail) {
     std::ostringstream oss;
     oss << baseStr << tail;
     return oss.str();

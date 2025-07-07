@@ -12,7 +12,7 @@ DECL_FORMAT(filesync::types::File, f) {
 }
 
 int main(int argc, char* argv[]) {
-    filesync::context::DirectoryHandler dirH{"/repo/gbs/gbs-page"};
+    filesync::context::DirectoryHandler dirH{"/repo/gbs/gbs-page/docs"};
     auto files = dirH.traverse();
     for (const auto& it : files) {
         std::cout << it << std::endl;
