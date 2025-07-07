@@ -13,13 +13,24 @@ namespace filesync::context {
 namespace {
 types::File checksumFile(const std::string& filePath) {
     std::ifstream binaryFile{filePath, std::ios::binary};
+    std::vector<char> buffer;
+
     if (!binaryFile) {
         throw std::runtime_error{format("Failed to open file: ", filePath.c_str())};
     }
-    return types::File{filePath, hash::md5hash(hash::Data{0})};
-}
-}
 
+    binaryFile.seekg(std::ios::end);
+    auto fileSize = binaryFile.tellg();
+    buffer.reserve(fileSize);
+
+    binaryFile.seekg(std::ios::beg);
+    binaryFile.read(buffer.data(), fileSize);
+    binaryFile.close();
+
+    hash::Data fileData{buffer.begin(), buffer.end()};
+    return types::File{filePath, hash::md5hash(fileData)};
+}
+}
 
 types::SortedVector<types::File> DirectoryHandler::traverse() {
     types::SortedVector<types::File> files;

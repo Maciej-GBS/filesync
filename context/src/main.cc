@@ -1,16 +1,21 @@
 #include <iostream>
 #include <string>
 
-#include <hash/inc/hash_helper.h>
+#include "../inc/directory_handler.h"
+#include <types/inc/sorted_vector.h>
+#include <types/inc/file.h>
 #include <sys/inc/log.h>
 
+DECL_FORMAT(filesync::types::File, f) {
+    os << "<file " << f.path << " hash=" << f.md5hash << ">";
+    return os;
+}
+
 int main(int argc, char* argv[]) {
-    filesync::types::Hash16 h1;
-
-    std::vector<unsigned char> testData = {3, 3, 45, 21, 2, 3};
-    h1 = filesync::hash::md5hash(testData);
-
-    std::cout << filesync::format("Calculated hash = ", FORMATSTRING(h1)) << std::endl;
-
+    filesync::context::DirectoryHandler dirH{"/repo/gbs/gbs-page"};
+    auto files = dirH.traverse();
+    for (const auto& it : files) {
+        std::cout << it << std::endl;
+    }
     return 0;
 }

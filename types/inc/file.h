@@ -13,6 +13,7 @@ struct File {
     File(std::string p, Hash16 h) : path{p}, md5hash{h} {}
 
     bool operator<(const File& o) const { return md5hash < o.md5hash; }
+    bool operator==(const File& o) const { return md5hash == o.md5hash; }
 };
 
 }

@@ -4,6 +4,8 @@
 #include <sstream>
 #include <type_traits>
 
+#define DECL_FORMAT(type, name)  std::ostream& operator<<(std::ostream& os, const type& name)
+#define FORMAT(base, obj) ::filesync::format(base, obj)
 #define FORMATSTRING(obj) ::filesync::print(obj).c_str()
 
 namespace filesync {
