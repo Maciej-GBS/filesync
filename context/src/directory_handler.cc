@@ -14,7 +14,7 @@ namespace filesync::context {
 namespace {
 constexpr int BUF_SIZE = 256;
 
-types::File checksumFileContents(const std::string& filePath) {
+types::File create_file_element(const std::string& filePath) {
     std::ifstream binaryFile{filePath, std::ios::binary};
     hash::Data fileData;
     char* buffer = new char[BUF_SIZE];
@@ -45,7 +45,7 @@ types::SortedVector<types::File> DirectoryHandler::traverse() {
             files.insert(scopedFiles.begin(), scopedFiles.end());
         }
         else if (f.is_regular_file() || f.is_block_file() || f.is_character_file()) {
-            files.insert(checksumFileContents(f.path()));
+            files.insert(create_file_element(f.path()));
         }
     }
 

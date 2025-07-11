@@ -5,20 +5,15 @@
 
 namespace filesync::argparse {
 
-namespace {
-const std::vector<std::pair<std::string, std::string>> ARGS = {
-    {"source", "Source directory to sync"},
-    {"destination", "Destination directory to sync"},
-    {"--find-duplicates", "List duplicate files at destination and exit"},
-    {"--verbose", "Enable verbose mode"},
-    {"--dry-run", "Perform a dry run (don't make any changes)"},
-    {"--help", "Show this help message and exit"}
-};
-}
-
 class ArgumentParser {
 private:
-    void help() const;
+    std::string sourceDir;
+    std::string destDir;
+    bool verbose{false};
+    bool dryRun{false};
+    bool showDuplicates{false};
+
+    void help(const char* exec) const;
 
 public:
     ArgumentParser() {}
@@ -26,8 +21,8 @@ public:
 
     void parse_args(int argc, char *argv[]);
 
-    char* get_source_directory() const;
-    char* get_destination_directory() const;
+    std::string get_source_directory() const;
+    std::string get_destination_directory() const;
 
     bool is_find_duplicates() const;
     bool is_verbose() const;
