@@ -20,7 +20,7 @@ types::File checksumFileContents(const std::string& filePath) {
     char* buffer = new char[BUF_SIZE];
 
     if (!binaryFile) {
-        throw std::runtime_error{concat("Failed to open file: ", filePath.c_str())};
+        throw std::runtime_error{format("Failed to open file: %s", filePath.c_str())};
     }
 
     std::streamsize bufUsed = 1;

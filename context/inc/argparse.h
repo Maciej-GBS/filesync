@@ -21,7 +21,7 @@ private:
     void help() const;
 
 public:
-    ArgumentParser() = default;
+    ArgumentParser() {}
     ~ArgumentParser() = default;
 
     void parse_args(int argc, char *argv[]);

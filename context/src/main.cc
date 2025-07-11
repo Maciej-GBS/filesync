@@ -11,11 +11,15 @@ DECL_FORMAT(filesync::types::File, f) {
     return os;
 }
 
-int main(int argc, char* argv[]) {
-    filesync::context::DirectoryHandler dirH{"/repo/gbs/gbs-page/docs"};
+void analyze_dir(const char* path) {
+    filesync::context::DirectoryHandler dirH{path};
     auto files = dirH.traverse();
     for (const auto& it : files) {
         std::cout << it << std::endl;
     }
+}
+
+int main(int argc, char* argv[]) {
+    std::cout << filesync::format("Say goodbye %d", 991).c_str() << std::endl;
     return 0;
 }

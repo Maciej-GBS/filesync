@@ -1,7 +1,12 @@
 #pragma once
 
-#include <string>
+#ifndef FILESYNC_LOG_H
+#define FILESYNC_LOG_H
+
+#include <cstdarg>
 #include <sstream>
+#include <stdio.h>
+#include <string>
 #include <type_traits>
 
 #define DECL_FORMAT(type, name)  std::ostream& operator<<(std::ostream& os, const type& name)
@@ -25,10 +30,15 @@ std::enable_if_t<is_streamable_v<T>, std::string> print(const T& obj) {
     return oss.str();
 }
 
-inline std::string concat(const char* baseStr, const char* tail) {
-    std::ostringstream oss;
-    oss << baseStr << tail;
-    return oss.str();
+inline std::string format(const char* baseStr, ...) {
+    va_list args;
+    char buffer[512];
+    va_start(args, baseStr);
+    vsprintf(buffer, baseStr, args);
+    va_end(args);
+    return std::string{buffer};
 }
 
 }
+
+#endif
