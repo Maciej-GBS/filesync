@@ -49,6 +49,10 @@ public:
             std::sort(data.begin(), data.end());
         }
     }
+
+    T& at(size_t index) const {
+        return data.at(index);
+    }
 };
 
 }

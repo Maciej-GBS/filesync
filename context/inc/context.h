@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "argparse.h"
 
 namespace filesync::types {
