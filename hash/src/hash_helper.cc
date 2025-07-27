@@ -10,7 +10,7 @@ types::Hash16 md5hash(const Data& input) {
     
     MD5_CTX ctx;
 
-    MD5(input.data(), input.size(), output);
+    // MD5(input.data(), input.size(), output);
     MD5_Init(&ctx);
     MD5_Update(&ctx, input.data(), input.size());
     MD5_Final(output, &ctx);
