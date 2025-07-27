@@ -55,8 +55,8 @@ int Context::run(int argc, char* argv[]) {
     }
 
     for (const auto& file : *sourceFiles) {
-        const auto targetIt = std::lower_bound(targetFiles->begin(), targetFiles->end(), file);
-        if (targetIt != targetFiles->end()) {
+        const auto targetIt = std::upper_bound(targetFiles->begin(), targetFiles->end(), file);
+        if (targetIt != targetFiles->end() && !(*targetIt == file)) {
             user_message(format(
                 "File %s already exists at target %s [%s]", FORMATSTR(file.path), FORMATSTR(targetIt->path), FORMATSTR(file.hash)));
             if (!parser.is_find_duplicates()) {
@@ -73,6 +73,7 @@ int Context::run(int argc, char* argv[]) {
         }
         else {
             // TODO copy from source to destination
+            user_message(format("Copying file %s", FORMATSTR(file.path)));
         }
     }
 
