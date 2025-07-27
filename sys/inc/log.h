@@ -1,15 +1,11 @@
 #pragma once
 
-#ifndef FILESYNC_LOG_H
-#define FILESYNC_LOG_H
-
 #include <cstdarg>
 #include <sstream>
 #include <stdio.h>
 #include <string>
 #include <type_traits>
 
-#define DECL_FORMAT(type, name)  std::ostream& operator<<(std::ostream& os, const type& name)
 #define FORMATSTR(obj) ::filesync::print(obj).c_str()
 
 namespace filesync {
@@ -40,5 +36,3 @@ inline std::string format(const char* baseStr, ...) {
 }
 
 }
-
-#endif

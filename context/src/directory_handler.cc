@@ -31,7 +31,7 @@ types::File create_file_element(const std::string& filePath) {
     binaryFile.close();
     delete[] buffer;
 
-    return types::File{filePath, hash::md5hash(fileData)};
+    return types::File{filePath, hash::md5hash(fileData), fileData.size()};
 }
 }
 

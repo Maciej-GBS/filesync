@@ -18,9 +18,10 @@ FileVector read_directory(const std::string& dir) {
 template <class InputIt, typename Predicate>
 InputIt takeWhile(InputIt it, const InputIt& end, Predicate pred) {
     while (it != end) {
-        if (!pred(*it++)) {
+        if (!pred(*it)) {
             return it;
         }
+        ++it;
     }
     return end;
 }
@@ -62,16 +63,12 @@ int Context::run(int argc, char* argv[]) {
                 continue;
             }
             const auto endDuplicates = takeWhile(
-                targetIt, targetFiles->end(), [&file](const types::File& f) { return file.hash == f.hash; });
-            if (std::distance(targetIt, endDuplicates) <= 1) {
+                targetIt, targetFiles->end(), [&file](const types::File& f) { return file == f; });
+            if (targetIt == endDuplicates) {
                 continue;
             }
             std::for_each(targetIt + 1, endDuplicates, [&file, this](const types::File& f) {
-                std::cout << file.path << " = " << f.path;
-                if (parser.is_verbose()) {
-                    std::cout << format(" [hash: %s]", FORMATSTR(file.hash));
-                }
-                std::cout << std::endl;
+                std::cout << file << " = " << f << std::endl;
             });
         }
         else {
