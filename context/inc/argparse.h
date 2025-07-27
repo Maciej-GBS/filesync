@@ -21,8 +21,8 @@ public:
 
     void parse_args(int argc, char *argv[]);
 
-    std::string get_source_directory() const;
-    std::string get_destination_directory() const;
+    const std::string& get_source_directory() const;
+    const std::string& get_destination_directory() const;
 
     bool is_find_duplicates() const;
     bool is_verbose() const;

@@ -16,6 +16,9 @@ class Context {
     std::shared_ptr<FileVector> sourceFiles;
     std::shared_ptr<FileVector> targetFiles;
 
+    void user_message(const std::string& msg) const;
+    void user_message(const char* msg) const;
+
 public:
     Context() {};
     ~Context() = default;

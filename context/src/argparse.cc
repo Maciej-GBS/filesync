@@ -63,11 +63,11 @@ namespace {
         }
     }
 
-    std::string ArgumentParser::get_source_directory() const {
+    const std::string& ArgumentParser::get_source_directory() const {
         return sourceDir;
     }
 
-    std::string ArgumentParser::get_destination_directory() const {
+    const std::string& ArgumentParser::get_destination_directory() const {
         return destDir;
     }
 
