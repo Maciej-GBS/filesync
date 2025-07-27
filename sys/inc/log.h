@@ -10,7 +10,7 @@
 #include <type_traits>
 
 #define DECL_FORMAT(type, name)  std::ostream& operator<<(std::ostream& os, const type& name)
-#define FORMATSTRING(obj) ::filesync::print(obj).c_str()
+#define FORMATSTR(obj) ::filesync::print(obj).c_str()
 
 namespace filesync {
 

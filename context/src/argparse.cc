@@ -29,12 +29,22 @@ namespace {
             help(argv[0]);
         }
 
-        sourceDir = {argv[1]};
-        destDir = {argv[2]};
-
-        for (int i = 3; i < argc; ++i) {
+        for (int i = 1; i < argc; ++i) {
             bool argRecognized = false;
             char* arg = argv[i];
+            if (arg[0] != '-') {
+                if (sourceDir.size() == 0) {
+                    sourceDir = {arg};
+                }
+                else if (destDir.size() == 0) {
+                    destDir = {arg};
+                }
+                else {
+                    help(argv[0]);
+                }
+                continue;
+            }
+
             for (size_t argIter = 2; argIter < ARGS.size(); ++argIter) {
                 if (ARGS.at(argIter).first.compare(arg) != 0) {
                     continue;
@@ -60,6 +70,9 @@ namespace {
                 std::cout << format("Argument %s not recognized", arg).c_str() << std::endl;
                 help(argv[0]);
             }
+        }
+        if (destDir.size() == 0) {
+            help(argv[0]);
         }
     }
 

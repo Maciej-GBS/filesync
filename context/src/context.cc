@@ -42,10 +42,10 @@ int Context::run(int argc, char* argv[]) {
     const std::string& srcDir{parser.get_source_directory()};
     const std::string& targetDir{parser.get_destination_directory()};
 
-    user_message(format("Using source directory: %s", srcDir));
+    user_message(format("Using source directory: %s", FORMATSTR(srcDir)));
     sourceFiles = std::make_shared<FileVector>(read_directory(srcDir));
     if (srcDir.compare(targetDir) != 0) {
-        user_message(format("Using destination directory: %s", targetDir));
+        user_message(format("Using destination directory: %s", FORMATSTR(targetDir)));
         targetFiles = std::make_shared<FileVector>(read_directory(targetDir));
     }
     else {
@@ -53,33 +53,25 @@ int Context::run(int argc, char* argv[]) {
         targetFiles = sourceFiles;
     }
 
-    std::vector<types::Hash16> targetHashes;
-    targetHashes.reserve(targetFiles->size());
-    std::transform(
-        targetFiles->begin(),
-        targetFiles->end(),
-        std::back_inserter(targetHashes),
-        [](const auto& f) { return f.md5hash; }
-    );
-    bool result;
     for (const auto& file : *sourceFiles) {
-        auto hashEqPred = [&file](const types::File& f) {
-            return file.md5hash == f.md5hash;
-        };
-        result = std::binary_search(targetHashes.begin(), targetHashes.end(), file.md5hash);
-        if (result) {
-            user_message(format("File %s already exists at target hash = %i", file.path, file.md5hash));
+        const auto targetIt = std::lower_bound(targetFiles->begin(), targetFiles->end(), file);
+        if (targetIt != targetFiles->end()) {
+            user_message(format(
+                "File %s already exists at target %s [%s]", FORMATSTR(file.path), FORMATSTR(targetIt->path), FORMATSTR(file.hash)));
             if (!parser.is_find_duplicates()) {
                 continue;
             }
-            // TODO optimize with binary search? switch to map?
-            const auto& firstOccurence = std::find_if(targetFiles->begin(), targetFiles->end(), hashEqPred);
-            if (firstOccurence == targetFiles->end()) {
-                throw std::runtime_error("Target file reference could not be found!");
+            const auto endDuplicates = takeWhile(
+                targetIt, targetFiles->end(), [&file](const types::File& f) { return file.hash == f.hash; });
+            if (std::distance(targetIt, endDuplicates) <= 1) {
+                continue;
             }
-            const auto endDuplicates = takeWhile(firstOccurence, targetFiles->end(), hashEqPred);
-            std::for_each(firstOccurence, endDuplicates, [&file](const types::File& f) {
-                std::cout << file.path << " = " << f.path << std::endl;
+            std::for_each(targetIt + 1, endDuplicates, [&file, this](const types::File& f) {
+                std::cout << file.path << " = " << f.path;
+                if (parser.is_verbose()) {
+                    std::cout << format(" [hash: %s]", FORMATSTR(file.hash));
+                }
+                std::cout << std::endl;
             });
         }
         else {
