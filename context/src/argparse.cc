@@ -11,13 +11,13 @@ namespace {
         {"destination", "Destination directory to sync"},
         {"--find-duplicates", "List duplicate files at destination and exit"},
         {"--verbose", "Enable verbose mode"},
-        {"--dry-run", "Perform a dry run (don't make any changes)"},
+        {"--commit", "Applies changes to disk (default dry-run)"},
         {"--help", "Show this help message and exit"}
     };
 }
 
     void ArgumentParser::help(const char* exec) const {
-        std::cout << "Usage: " << exec << " source destination" << std::endl;
+        std::cout << "Usage: " << exec << " source [destination]" << std::endl;
         for (auto it : ARGS) {
             std::cout << format("%20s\t%s", it.first.c_str(), it.second.c_str()).c_str() << std::endl;
         }
@@ -57,8 +57,8 @@ namespace {
                 case 3: // verbose
                     verbose = true;
                     break;
-                case 4: // dry-run 
-                    dryRun = true;
+                case 4: // commit
+                    dryRun = false;
                     break;
                 default:
                     help(argv[0]);
@@ -72,7 +72,7 @@ namespace {
             }
         }
         if (destDir.size() == 0) {
-            help(argv[0]);
+            destDir = std::string(sourceDir);
         }
     }
 

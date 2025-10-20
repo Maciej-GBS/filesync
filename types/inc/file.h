@@ -43,7 +43,7 @@ struct File {
 };
 
 DECL_FORMAT(File, file) {
-    os << file.path << " (" << file.contentLength << ") [" << file.hash << "]";
+    os << "{" << file.path << " (" << file.contentLength << ") [" << file.hash << "]}";
     return os;
 }
 

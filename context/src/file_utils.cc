@@ -60,4 +60,19 @@ types::SortedVector<types::File> traverse_directory(const std::string& dirPath, 
     return files;
 }
 
+bool create_directory(const std::string& path) {
+    std::error_code ec;
+    return std::filesystem::create_directories(path, ec);
+}
+
+bool copy_file(const std::string& source, const std::string& destination) {
+    std::error_code ec;
+    const auto destinationDir{destination.substr(0, destination.find_last_of('/'))};
+
+    if (!std::filesystem::exists(destinationDir)) {
+        create_directory(destinationDir);
+    }
+    return std::filesystem::copy_file(source, destination, ec);
+}
+
 }

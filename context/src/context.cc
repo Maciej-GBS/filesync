@@ -50,10 +50,10 @@ int Context::run(int argc, char* argv[]) {
     }
 
     for (const auto& file : *sourceFiles) {
-        const auto targetIt = std::upper_bound(targetFiles->begin(), targetFiles->end(), file);
-        if (targetIt != targetFiles->end() && !(*targetIt == file)) {
+        const auto targetIt = std::lower_bound(targetFiles->begin(), targetFiles->end(), file);
+        if (targetIt != targetFiles->end() && *targetIt == file) {
             user_message(format(
-                "File %s already exists at target %s [%s]", FORMATSTR(file.path), FORMATSTR(targetIt->path), FORMATSTR(file.hash)));
+                "File %s already exists at target %s", FORMATSTR(file), FORMATSTR(*targetIt)));
             if (!parser.is_find_duplicates()) {
                 continue;
             }
@@ -67,8 +67,19 @@ int Context::run(int argc, char* argv[]) {
             });
         }
         else {
-            // TODO copy from source to destination
-            user_message(format("Copying file %s", FORMATSTR(file.path)));
+            const auto sourceRelativePath{file.path.substr(srcDir.size())};
+            const auto targetPath{targetDir + sourceRelativePath};
+
+            if (parser.is_dry_run()) {
+                user_message(format("Would copy file %s to %s", FORMATSTR(file.path), FORMATSTR(targetPath)));
+                continue;
+            }
+
+            user_message(format("Copying file %s to %s", FORMATSTR(file.path), FORMATSTR(targetPath)));
+            if (!copy_file(file.path, targetPath)) {
+                user_message(format("Failed to copy file %s", FORMATSTR(file.path)));
+                continue;
+            }
         }
     }
 

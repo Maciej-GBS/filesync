@@ -10,7 +10,7 @@ private:
     std::string sourceDir;
     std::string destDir;
     bool verbose{false};
-    bool dryRun{false};
+    bool dryRun{true};
     bool showDuplicates{false};
 
     void help(const char* exec) const;
