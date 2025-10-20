@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "../inc/context.h"
-#include "../inc/directory_handler.h"
+#include "../inc/file_utils.h"
 #include <types/inc/file.h>
 #include <types/inc/sorted_vector.h>
 #include <sys/inc/log.h>
@@ -10,11 +10,6 @@
 namespace filesync::context {
 
 namespace {
-FileVector read_directory(const std::string& dir) {
-    DirectoryHandler handler{dir};
-    return handler.traverse();
-}
-
 template <class InputIt, typename Predicate>
 InputIt takeWhile(InputIt it, const InputIt& end, Predicate pred) {
     while (it != end) {
@@ -44,10 +39,10 @@ int Context::run(int argc, char* argv[]) {
     const std::string& targetDir{parser.get_destination_directory()};
 
     user_message(format("Using source directory: %s", FORMATSTR(srcDir)));
-    sourceFiles = std::make_shared<FileVector>(read_directory(srcDir));
+    sourceFiles = std::make_shared<FileVector>(traverse_directory(srcDir));
     if (srcDir.compare(targetDir) != 0) {
         user_message(format("Using destination directory: %s", FORMATSTR(targetDir)));
-        targetFiles = std::make_shared<FileVector>(read_directory(targetDir));
+        targetFiles = std::make_shared<FileVector>(traverse_directory(targetDir));
     }
     else {
         user_message("Using same directory as source and destination!");
