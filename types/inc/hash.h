@@ -26,6 +26,16 @@ using Hash16 = std::bitset<128>;
 using Hash32 = std::bitset<256>;
 using Hash64 = std::bitset<512>;
 
+template <size_t N>
+bool operator<(const std::bitset<N>& lhs, const std::bitset<N>& rhs) {
+    for (size_t i = 0; i < N; ++i) {
+        if (lhs[i] != rhs[i]) {
+            return lhs[i] < rhs[i];
+        }
+    }
+    return false;
+}
+
 DECL_FORMAT(Hash16, hash) {
     return format_bitset(os, hash);
 }
