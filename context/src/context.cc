@@ -22,38 +22,30 @@ InputIt takeWhile(InputIt it, const InputIt& end, Predicate pred) {
 }
 }
 
-void Context::user_message(const std::string& msg) const {
-    user_message(msg.c_str());
-}
-
-void Context::user_message(const char* msg) const {
-    if (parser.is_verbose()) {
-        std::cout << msg << std::endl;
-    }
-}
-
 int Context::run(int argc, char* argv[]) {
     parser.parse_args(argc, argv);
 
+    const bool isVerbose{parser.is_verbose()};
     const std::string& srcDir{parser.get_source_directory()};
     const std::string& targetDir{parser.get_destination_directory()};
 
-    user_message(format("Using source directory: %s", FORMATSTR(srcDir)));
-    sourceFiles = std::make_shared<FileVector>(traverse_directory(srcDir));
+    LOG("Using source directory: %s", FORMATSTR(srcDir));
+    sourceFiles = std::make_shared<FileVector>(file_utils::traverse_directory(srcDir));
     if (srcDir.compare(targetDir) != 0) {
-        user_message(format("Using destination directory: %s", FORMATSTR(targetDir)));
-        targetFiles = std::make_shared<FileVector>(traverse_directory(targetDir));
+        LOG("Using destination directory: %s", FORMATSTR(targetDir));
+        targetFiles = std::make_shared<FileVector>(file_utils::traverse_directory(targetDir));
     }
     else {
-        user_message("Using same directory as source and destination!");
+        LOG("Using same directory as source and destination!");
         targetFiles = sourceFiles;
     }
 
     for (const auto& file : *sourceFiles) {
         const auto targetIt = std::lower_bound(targetFiles->begin(), targetFiles->end(), file);
         if (targetIt != targetFiles->end() && *targetIt == file) {
-            user_message(format(
-                "File %s already exists at target %s", FORMATSTR(file), FORMATSTR(*targetIt)));
+            if (isVerbose) {
+                LOG("File %s already exists at target %s", FORMATSTR(file), FORMATSTR(*targetIt));
+            }
             if (!parser.is_find_duplicates()) {
                 continue;
             }
@@ -71,13 +63,15 @@ int Context::run(int argc, char* argv[]) {
             const auto targetPath{targetDir + sourceRelativePath};
 
             if (parser.is_dry_run()) {
-                user_message(format("Would copy file %s to %s", FORMATSTR(file.path), FORMATSTR(targetPath)));
+                LOG("Would copy file %s to %s", FORMATSTR(file.path), FORMATSTR(targetPath));
                 continue;
             }
 
-            user_message(format("Copying file %s to %s", FORMATSTR(file.path), FORMATSTR(targetPath)));
-            if (!copy_file(file.path, targetPath)) {
-                user_message(format("Failed to copy file %s", FORMATSTR(file.path)));
+            if (isVerbose) [[likely]] {
+                LOG("Copying file %s to %s", FORMATSTR(file.path), FORMATSTR(targetPath));
+            }
+            if (!file_utils::copy_file(file.path, targetPath)) {
+                LOG("Failed to copy file %s", FORMATSTR(file.path));
                 continue;
             }
         }

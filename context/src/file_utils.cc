@@ -7,9 +7,8 @@
 #include <hash/inc/hash_helper.h>
 #include <types/inc/file.h>
 #include <types/inc/sorted_vector.h>
-#include <sys/inc/log.h>
 
-namespace filesync::context {
+namespace filesync::context::file_utils {
 
 namespace {
 constexpr int MAX_DEPTH = 20;

@@ -9,7 +9,7 @@ struct File;
 template <typename T> class SortedVector;
 }
 
-namespace context {
+namespace context::file_utils {
 
 types::SortedVector<types::File> traverse_directory(const std::string&);
 types::SortedVector<types::File> traverse_directory(const std::string&, int maxDepth);

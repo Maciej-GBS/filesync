@@ -19,13 +19,13 @@ namespace {
     void ArgumentParser::help(const char* exec) const {
         std::cout << "Usage: " << exec << " source [destination]" << std::endl;
         for (auto it : ARGS) {
-            std::cout << format("%20s\t%s", it.first.c_str(), it.second.c_str()).c_str() << std::endl;
+            std::cout << FORMAT("%20s\t%s", it.first.c_str(), it.second.c_str()).c_str() << std::endl;
         }
         exit(0);
     }
 
     void ArgumentParser::parse_args(int argc, char *argv[]) {
-        if (argc < 3) {
+        if (argc < 2) {
             help(argv[0]);
         }
 
@@ -67,7 +67,7 @@ namespace {
                 argRecognized = true;
             }
             if (!argRecognized) {
-                std::cout << format("Argument %s not recognized", arg).c_str() << std::endl;
+                LOG("Argument %s not recognized", arg);
                 help(argv[0]);
             }
         }

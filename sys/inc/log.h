@@ -6,9 +6,11 @@
 #include <string>
 #include <type_traits>
 
-#define FORMATSTR(obj) ::filesync::print(obj).c_str()
+#define FORMATSTR(obj) ::filesync::sys::print(obj).c_str()
+#define FORMAT(...) ::filesync::sys::format(__VA_ARGS__)
+#define LOG(...) ::filesync::sys::log(__VA_ARGS__)
 
-namespace filesync {
+namespace filesync::sys {
 
 template <typename T, typename = void>
 struct is_streamable : std::false_type {};
@@ -33,6 +35,19 @@ inline std::string format(const char* baseStr, ...) {
     vsprintf(buffer, baseStr, args);
     va_end(args);
     return std::string{buffer};
+}
+
+inline void log(const std::string& msg) {
+    std::cout << msg << std::endl;
+}
+
+inline void log(const char* baseStr, ...) {
+    va_list args;
+    char buffer[512];
+    va_start(args, baseStr);
+    vsprintf(buffer, baseStr, args);
+    va_end(args);
+    std::cout << buffer << std::endl;
 }
 
 }
